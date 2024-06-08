@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:5.6
+    container_name: mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: SkiStationDB
+    ports:
+      - "3306:3306"
+    volumes:
+      - /home/ubuntu22_saif/mysql-volume:/var/lib/mysql
+  springboot:
+    image: spring_ssp
+    container_name: project-container
+    ports:
+      - "9091:9090"
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/SkiStationDB?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+      - SPRING_PROFILES_ACTIVE=prod
+    volumes:
+      - /home/ubuntu22_saif/Ski-Station-Project-volume
+volumes:
+  mysql_data:
